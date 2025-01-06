@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import BooksScreen from "./books.js";
+import BooksScreen from "./BooksScreen.js";
 const Main = () => {
     return (
         <View style={styles.container}>
