@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, TouchableOpacity, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { useGlobalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons'; // Biblioteca de iconos de Expo
+import BottomBar from './bottombar.tsx';
 
 const BookDetail = () => {
   const { id } = useGlobalSearchParams(); // Obtener el 'id' de la URL
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     fetchBookDetails();
@@ -46,6 +48,7 @@ const BookDetail = () => {
       <ScrollView 
         contentContainerStyle={styles.scrollContent} 
         horizontal={false}
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.card}>
           <Text style={styles.title}>{book.title}</Text>
@@ -57,9 +60,19 @@ const BookDetail = () => {
           />
           <View style={styles.details}>
             <Text style={styles.author}>{book.author}</Text>
-            <Text style={styles.synopsis}>{book.synopsys}</Text>
+
+            {/* Descripción colapsable */}
+            <Text style={styles.synopsis}>
+              {showFullDescription ? book.synopsys : book.synopsys.substring(0, 150) + '...'}
+            </Text>
+
+            {/* Botón para expandir la descripción */}
+            <TouchableOpacity onPress={() => setShowFullDescription(!showFullDescription)}>
+              <Text style={styles.readMore}>{showFullDescription ? 'Leer menos' : 'Leer más'}</Text>
+            </TouchableOpacity>
             <Text style={styles.price}>{book.price} $</Text>
           </View>
+          
           {/* Contenedor de los botones */}
           <View style={styles.buttonContainer}>
             {/* Botón de "Favoritos" */}
@@ -86,6 +99,7 @@ const BookDetail = () => {
           </View>
         </View>
       </ScrollView>
+      <BottomBar />
     </SafeAreaView>
   );
 };
@@ -99,20 +113,21 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 20,
+    paddingBottom: 80,  // Añadir un espacio para los botones
   },
   card: {
     backgroundColor: '#fff',
     borderRadius: 10,
     overflow: 'hidden',
-    width: '90%',
-    minHeight: 600,
+    marginTop: 20,
+    width: '85%',
     padding: 10,
     elevation: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+    marginBottom: 20,  // Añadir margen inferior para que no se pegue al borde
   },
   title: {
     fontSize: 22,
@@ -136,6 +151,10 @@ const styles = StyleSheet.create({
   synopsis: {
     fontSize: 14,
     marginBottom: 10,
+  },
+  readMore: {
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
   price: {
     fontSize: 18,

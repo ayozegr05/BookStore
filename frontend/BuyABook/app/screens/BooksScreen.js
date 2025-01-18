@@ -14,7 +14,7 @@ const BooksScreen = () => {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch('http://192.168.1.76:3000/'); 
+      const response = await fetch('http://192.168.1.71:3000/'); 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     width: 250,
+    height: 600,
     padding: 10,
     margin: 20,
     elevation: 12, // Para sombra en Android
